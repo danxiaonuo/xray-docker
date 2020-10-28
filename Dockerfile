@@ -113,8 +113,8 @@ RUN set -ex && \
 
 # 安装dumb-init
 RUN set -eux \
-    curl -Lo /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 \
-	&& chmod +x /usr/bin/dumb-init
+    wget --no-check-certificate https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 -O /usr/bin/dumb-init && \
+	chmod +x /usr/bin/dumb-init
 
 # 设置环境变量
 ENV PATH /usr/bin/v2ray:$PATH
