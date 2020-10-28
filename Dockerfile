@@ -99,23 +99,22 @@ RUN set -eux \
    && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
    # 更新时间
    && echo ${TZ} > /etc/timezone
-
-# 安装dumb-init
-RUN set -eux \
-    curl -Lo /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 \
-	&& chmod +x /usr/bin/dumb-init
 	
 # 拷贝v2ray二进制文件至临时目录
 COPY --from=builder /tmp/v2ray.tgz /tmp
 
 # 授予文件权限
 RUN set -ex && \
-    apk --no-cache add ca-certificates && \
     mkdir -p /usr/bin/v2ray /etc/v2ray && \
     tar xvfz /tmp/v2ray.tgz -C /usr/bin/v2ray && \
     rm -rf /tmp/v2ray.tgz /usr/bin/v2ray/*.sig /usr/bin/v2ray/doc /usr/bin/v2ray/*.json /usr/bin/v2ray/*.dat /usr/bin/v2ray/sys* && \
     chmod +x /usr/bin/v2ray/v2ctl && \
     chmod +x /usr/bin/v2ray/v2ray
+
+# 安装dumb-init
+RUN set -eux \
+    curl -Lo /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 \
+	&& chmod +x /usr/bin/dumb-init
 
 # 设置环境变量
 ENV PATH /usr/bin/v2ray:$PATH
