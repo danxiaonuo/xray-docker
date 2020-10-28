@@ -1,8 +1,14 @@
 ##########################################
-#         构建可执行二进制文件            #
+#         构建可执行二进制文件             #
 ##########################################
 # 指定构建的基础镜像
 FROM golang:alpine AS builder
+
+# 作者描述信息
+MAINTAINER danxiaonuo
+# 时区设置
+ARG TZ=Asia/Shanghai
+ENV TZ=$TZ
 
 ARG PKG_DEPS="\
       tzdata \
