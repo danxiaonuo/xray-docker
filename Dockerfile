@@ -77,7 +77,7 @@ LABEL maintainer="danxiaonuo <danxiaonuo@danxiaonuo.me>" \
 
 ARG PKG_DEPS="\
       tzdata \
-      curl \
+      wget \
       ca-certificates"
 ENV PKG_DEPS=$PKG_DEPS
 
