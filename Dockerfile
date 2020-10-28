@@ -102,9 +102,9 @@ RUN set -eux \
 
 # 安装dumb-init
 RUN set -eux \
-    curl -Lo /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 && \
-    chmod +x /usr/bin/dumb-init
-
+    curl -Lo /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 \
+	&& chmod +x /usr/bin/dumb-init
+	
 # 拷贝v2ray二进制文件至临时目录
 COPY --from=builder /tmp/v2ray.tgz /tmp
 
