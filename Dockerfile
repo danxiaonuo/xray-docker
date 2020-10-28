@@ -65,14 +65,8 @@ ENV BUILD_DATE=$BUILD_DATE
 ARG VCS_REF
 ENV VCS_REF=$VCS_REF
 
-# dumb-init
-# https://github.com/Yelp/dumb-init
-ARG DUMBINIT_VERSION=1.2.2
-ENV DUMBINIT_VERSION=$DUMBINIT_VERSION
-
 ARG PKG_DEPS="\
       tzdata \
-      wget \
       ca-certificates"
 ENV PKG_DEPS=$PKG_DEPS
 
@@ -84,8 +78,6 @@ LABEL maintainer="danxiaonuo <danxiaonuo@danxiaonuo.me>" \
       org.label-schema.url="https://github.com/$DOCKER_IMAGE" \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/$DOCKER_IMAGE" \
-      versions.dumb-init=${DUMBINIT_VERSION}
-
 
 # 修改源地址
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
@@ -112,22 +104,11 @@ RUN set -ex && \
     chmod +x /usr/bin/v2ray/v2ctl && \
     chmod +x /usr/bin/v2ray/v2ray
 
-# 安装dumb-init
-RUN set -eux \
-    wget --no-check-certificate https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 -O /usr/bin/dumb-init && \
-    chmod +x /usr/bin/dumb-init
-
 # 设置环境变量
 ENV PATH /usr/bin/v2ray:$PATH
 
 # 拷贝配置文件
 COPY config.json /etc/v2ray/config.json
-
-# 容器信号处理
-STOPSIGNAL SIGQUIT
-
-# 入口
-ENTRYPOINT ["dumb-init"]
 
 # 运行v2ray
 CMD ["v2ray", "-config=/etc/v2ray/config.json"]
