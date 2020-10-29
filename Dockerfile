@@ -83,7 +83,7 @@ LABEL maintainer="danxiaonuo <danxiaonuo@danxiaonuo.me>" \
       org.label-schema.url="https://github.com/$DOCKER_IMAGE" \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/$DOCKER_IMAGE" \
-	  versions.dumb-init=${DUMBINIT_VERSION}
+      versions.dumb-init=${DUMBINIT_VERSION}
 
 
 # 修改源地址
@@ -120,7 +120,7 @@ RUN set -eux \
 ENV PATH /usr/bin/v2ray:$PATH
 
 # 拷贝配置文件
-COPY config.json /etc/v2ray/config.json
+COPY conf/v2ray/config.json /etc/v2ray/config.json
 
 # 容器信号处理
 STOPSIGNAL SIGQUIT
