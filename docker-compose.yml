@@ -9,7 +9,7 @@ services:
     image: danxiaonuo/v2ray:latest
     volumes:
       # 配置目录与文件
-      - ./config.json:/etc/v2ray/config.json:rw,cached
+      - ./conf/v2ray/config.json:/etc/v2ray/config.json:rw,cached
       # 同步宿主机时区与时间
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro,cached
       - /etc/localtime:/etc/localtime:ro,cached
