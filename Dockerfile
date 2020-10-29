@@ -10,6 +10,18 @@ MAINTAINER danxiaonuo
 ARG TZ=Asia/Shanghai
 ENV TZ=$TZ
 
+# 镜像变量
+ARG DOCKER_IMAGE=danxiaonuo/v2ray
+ENV DOCKER_IMAGE=$DOCKER_IMAGE
+ARG DOCKER_IMAGE_OS=golang
+ENV DOCKER_IMAGE_OS=$DOCKER_IMAGE_OS
+ARG DOCKER_IMAGE_TAG=alpine
+ENV DOCKER_IMAGE_TAG=$DOCKER_IMAGE_TAG
+ARG BUILD_DATE
+ENV BUILD_DATE=$BUILD_DATE
+ARG VCS_REF
+ENV VCS_REF=$VCS_REF
+
 ARG BUILD_DEPS="\
       tzdata \
       curl \
@@ -62,6 +74,17 @@ ENV PKG_DEPS=$PKG_DEPS
 # https://github.com/Yelp/dumb-init
 ARG DUMBINIT_VERSION=1.2.2
 ENV DUMBINIT_VERSION=$DUMBINIT_VERSION
+
+# http://label-schema.org/rc1/
+LABEL maintainer="danxiaonuo <danxiaonuo@danxiaonuo.me>" \
+      org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name="$DOCKER_IMAGE" \
+      org.label-schema.schema-version="1.0" \
+      org.label-schema.url="https://github.com/$DOCKER_IMAGE" \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/$DOCKER_IMAGE" \
+	  versions.dumb-init=${DUMBINIT_VERSION}
+
 
 # 修改源地址
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
