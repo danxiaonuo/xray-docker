@@ -23,9 +23,9 @@ on:
         description: 'build v2ray'
         required: false
         default: 'build v2ray'
-  # 每周三的晚上3点钟自动更新
+  # 每天的0点钟自动更新
   schedule:
-     - cron: '0 2 * * 3'
+     - cron: '0 0 * * *'
      
  # 任务集
 jobs:
