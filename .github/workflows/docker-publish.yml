@@ -74,5 +74,5 @@ jobs:
       if: (!contains(github.event.action, 'build')) || (github.event.inputs.build == 'true' && github.event.inputs.build  != 'false')
       with:
         token: ${{ secrets.DOCKER_TOKEN }}
-        repository: danxiaonuo/v2ray
+        repository: danxiaonuo/v2ray-docker
         event-type: Base Image Update
