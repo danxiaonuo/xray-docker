@@ -62,17 +62,3 @@ jobs:
         docker login -u ${{ secrets.ALIYUN_USERNAME }} -p ${{ secrets.ALIYUN_PASSWORD }} registry.cn-hongkong.aliyuncs.com
         docker tag ${{ secrets.DOCKERHUB_USERNAME }}/v2ray:${{ matrix.DOCKER_TAG }} registry.cn-hongkong.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:${{ matrix.DOCKER_TAG }}
         docker push registry.cn-hongkong.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:${{ matrix.DOCKER_TAG }}
- 
-  tigger:
-    runs-on: ubuntu-latest
-    needs: build
-    
-    # 运行步骤
-    steps:
-    - name: 触发构建镜像
-      uses: peter-evans/repository-dispatch@v1
-      if: (!contains(github.event.action, 'build')) || (github.event.inputs.build == 'true' && github.event.inputs.build  != 'false')
-      with:
-        token: ${{ secrets.DOCKER_TOKEN }}
-        repository: danxiaonuo/v2ray-docker
-        event-type: Base Image Update
