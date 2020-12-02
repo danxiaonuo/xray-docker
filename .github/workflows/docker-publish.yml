@@ -57,16 +57,8 @@ jobs:
         dockerfile: Dockerfile
         path: .
         
-  # 触发工作流
-  tigger:
-    runs-on: ubuntu-latest
-    if: github.event.repository.owner.id == github.event.sender.id
-    needs: build
-    
-    # 运行步骤
-    steps:
     - name: 触发上传至阿里云
       run: |
         docker login -u ${{ secrets.ALIYUN_USERNAME }} -p ${{ secrets.ALIYUN_PASSWORD }} registry.cn-shanghai.aliyuncs.com
-        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/v2ray:latest registry.cn-shanghai.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:latest
-        docker push registry.cn-shanghai.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:latest
+        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/v2ray:latest registry.cn-shanghai.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:${{ matrix.DOCKER_TAG }}
+        docker push registry.cn-shanghai.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:${{ matrix.DOCKER_TAG }}
