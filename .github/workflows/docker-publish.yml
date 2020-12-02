@@ -1,0 +1,72 @@
+#=================================================
+# https://github.com/danxiaonuo/v2ray-docker
+# Description: Build OpenWrt using GitHub Actions
+# Lisence: MIT
+# Author: danxiaonuo
+# Blog: https://www.danxiaonuo.com
+#=================================================
+
+name: 自动编译并上传镜像
+
+# 设置触发条件
+on:
+  # 仓库触发工作流
+  repository_dispatch:
+  # 编辑文件触发开始编译
+  push:
+    paths:
+      - 'Dockerfile'
+  # 手动触发工作流
+  workflow_dispatch:
+    inputs:
+      build:
+        description: 'build v2ray'
+        required: false
+        default: 'build v2ray'
+  # 每周三的晚上3点钟自动更新
+  schedule:
+     - cron: '0 2 * * 3'
+     
+ # 任务集
+jobs:
+  build:
+    # 选择虚拟环境
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - DOCKER_TAG: latest
+    
+    # 运行步骤
+    steps:
+    
+    # 检出master分支
+    - name: 检出master分支
+      uses: actions/checkout@v2
+  
+    - name: 构建镜像并发布Dockerhub
+      uses: docker/build-push-action@v1
+      with:
+        push: true
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: danxiaonuo/v2ray
+        tags: ${{ matrix.DOCKER_TAG }}
+        dockerfile: Dockerfile
+        path: .
+        
+  # 触发工作流
+  tigger:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    needs: build
+    
+    # 运行步骤
+    steps:
+    - name: 触发上传至阿里云
+      run: |
+        docker login -u ${{ secrets.ALIYUN_USERNAME }} -p ${{ secrets.ALIYUN_PASSWORD }} registry.cn-shanghai.aliyuncs.com
+        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/v2ray:${{ matrix.DOCKER_TAG }} registry.cn-shanghai.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:${{ matrix.DOCKER_TAG }}
+        docker push registry.cn-shanghai.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:${{ matrix.DOCKER_TAG }}
