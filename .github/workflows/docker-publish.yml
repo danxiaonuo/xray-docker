@@ -43,7 +43,7 @@ jobs:
     steps:
     
     # 检出master分支
-    - name: Check out code into the Go module directory
+    - name: 检出各个模块代码
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
