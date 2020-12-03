@@ -73,8 +73,6 @@ jobs:
         platforms: linux/amd64,linux/arm/v7,linux/arm64
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/v2ray:${{ matrix.DOCKER_TAG }}
-        cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/v2ray:${{ matrix.DOCKER_TAG }}
-        cache-to: type=inline
       
     - name: 上传至阿里云
       id: buildAndPushImage
