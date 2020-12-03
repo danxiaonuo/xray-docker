@@ -9,6 +9,9 @@ MAINTAINER danxiaonuo
 # 时区设置
 ARG TZ=Asia/Shanghai
 ENV TZ=$TZ
+# 语言设置
+ARG LANG=C.UTF-8
+ENV LANG=$LANG
 
 # 镜像变量
 ARG DOCKER_IMAGE=danxiaonuo/v2ray
@@ -64,6 +67,9 @@ MAINTAINER danxiaonuo
 # 时区设置
 ARG TZ=Asia/Shanghai
 ENV TZ=$TZ
+# 语言设置
+ARG LANG=C.UTF-8
+ENV LANG=$LANG
 
 ARG PKG_DEPS="\
       tzdata \
