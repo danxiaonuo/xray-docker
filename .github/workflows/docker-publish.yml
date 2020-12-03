@@ -72,11 +72,12 @@ jobs:
         file: ./Dockerfile
         platforms: linux/amd64,linux/arm/v7,linux/arm64
         push: true
-        tags: danxiaonuo/v2ray:${{ matrix.DOCKER_TAG }}
+        load: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/v2ray:${{ matrix.DOCKER_TAG }}
       
     - name: 上传至阿里云
       run: |
         sudo docker images
         docker login -u ${{ secrets.ALIYUN_USERNAME }} -p ${{ secrets.ALIYUN_PASSWORD }} registry.cn-hongkong.aliyuncs.com
-        docker tag danxiaonuo/v2ray:${{ matrix.DOCKER_TAG }} registry.cn-hongkong.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:${{ matrix.DOCKER_TAG }}
+        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/v2ray:${{ matrix.DOCKER_TAG }} registry.cn-hongkong.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:${{ matrix.DOCKER_TAG }}
         docker push registry.cn-hongkong.aliyuncs.com/${{ secrets.ALIYUN_NAMESPACES }}/v2ray:${{ matrix.DOCKER_TAG }}
