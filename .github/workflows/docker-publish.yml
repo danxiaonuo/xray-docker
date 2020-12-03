@@ -77,6 +77,7 @@ jobs:
         cache-to: type=inline
       
     - name: 上传至阿里云
+      id: buildAndPushImage
       uses: risfeng/docker-image-build-push-action@v1.0
       with:
         registry_url: 'registry.cn-hongkong.aliyuncs.com'
@@ -86,3 +87,6 @@ jobs:
         password: ${{ secrets.ALIYUN_PASSWORD }}
         image_version: ${{ matrix.DOCKER_TAG }}
         docker_file: '.'
+        
+    - name: 获取阿里云镜像地址
+      run: echo "这是阿里云镜像地址 ${{ steps.buildAndPushImage.outputs.image_pull_url }}"
