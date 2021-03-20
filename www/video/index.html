@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>video</title>
+    <style type="text/css">
+    body { background-color: #fdfdfd; padding: 0 20px; color:#000; font: 13px/18px monospace;}
+    a { color: #360; }
+    h3 { padding-top: 20px; }
+    </style>
+
+    <!-- Load player theme -->
+    <link rel="stylesheet" href="themes/maccaco/projekktor.style.css" type="text/css" media="screen" />
+
+    <!-- Load jquery -->
+    <script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+
+    <!-- load projekktor -->
+    <script type="text/javascript" src="projekktor-1.3.09.min.js"></script>
+
+</head>
+<body>
+<div id="player_a" class="projekktor" style="margin:0px auto; border:1px solid #FF0000"></div>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+        projekktor('#player_a', {
+        poster: 'media/intro.png',
+        title: 'this is projekktor',
+        playerFlashMP4: 'swf/StrobeMediaPlayback/StrobeMediaPlayback.swf',
+        playerFlashMP3: 'swf/StrobeMediaPlayback/StrobeMediaPlayback.swf',
+        width: 640,
+        height: 385,
+        playlist: [
+            {
+            0: {src: "media/liuli.mp4", type: "video/mp4"},
+            }
+        ]    
+        }, function(player) {} // on ready 
+        );
+    });
+    </script>
+</body>
+</html>
