@@ -21,11 +21,11 @@ on:
     inputs:
       build:
         description: 'build v2ray'
-        required: false
+        required: true
         default: 'build v2ray'
-  # 每天的0点钟自动更新
+  # 定时触发编译(每天早5点)
   schedule:
-     - cron: '0 0 * * *'
+     - cron: '0 21 * * *'
      
  # 任务集
 jobs:
