@@ -20,10 +20,6 @@ ARG DOCKER_IMAGE_OS=golang
 ENV DOCKER_IMAGE_OS=$DOCKER_IMAGE_OS
 ARG DOCKER_IMAGE_TAG=alpine
 ENV DOCKER_IMAGE_TAG=$DOCKER_IMAGE_TAG
-ARG BUILD_DATE
-ENV BUILD_DATE=$BUILD_DATE
-ARG VCS_REF
-ENV VCS_REF=$VCS_REF
 
 ARG BUILD_DEPS="\
       tzdata \
@@ -33,19 +29,20 @@ ARG BUILD_DEPS="\
       bash"
 ENV BUILD_DEPS=$BUILD_DEPS
 
-# 修改源地址
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 # ***** 安装依赖 *****
-RUN set -eux \
+RUN set -eux && \
+   # 修改源地址
+   sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
    # 更新源地址
-   && apk update \
+   apk update && \
    # 更新系统并更新系统软件
-   && apk upgrade && apk upgrade \
-   && apk add -U --update $BUILD_DEPS \
+   apk upgrade && apk upgrade && \
+   apk add --no-cache --clean-protected $BUILD_DEPS && \
+   rm -rf /var/cache/apk/* && \
    # 更新时区
-   && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
+   ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
    # 更新时间
-   && echo ${TZ} > /etc/timezone
+   echo ${TZ} > /etc/timezone
 
 # 运行工作目录
 WORKDIR /build
@@ -72,39 +69,40 @@ ARG LANG=C.UTF-8
 ENV LANG=$LANG
 
 ARG PKG_DEPS="\
+      zsh \
+      iproute2 \
+      git \
+      vim \
       tzdata \
+      curl \
       ca-certificates"
 ENV PKG_DEPS=$PKG_DEPS
 
 # dumb-init
 # https://github.com/Yelp/dumb-init
-ARG DUMBINIT_VERSION=1.2.2
+ARG DUMBINIT_VERSION=1.2.5
 ENV DUMBINIT_VERSION=$DUMBINIT_VERSION
 
-# http://label-schema.org/rc1/
-LABEL maintainer="danxiaonuo <danxiaonuo@danxiaonuo.me>" \
-      org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.name="$DOCKER_IMAGE" \
-      org.label-schema.schema-version="1.0" \
-      org.label-schema.url="https://github.com/$DOCKER_IMAGE" \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/$DOCKER_IMAGE" \
-      versions.dumb-init=${DUMBINIT_VERSION}
-
-
-# 修改源地址
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 # ***** 安装依赖 *****
-RUN set -eux \
+RUN set -eux && \
+   # 修改源地址
+   sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
    # 更新源地址
-   && apk update \
+   apk update && \
    # 更新系统并更新系统软件
-   && apk upgrade && apk upgrade \
-   && apk add -U --update $PKG_DEPS \
+   apk upgrade && apk upgrade && \
+   apk add --no-cache --clean-protected $PKG_DEPS && \
+   rm -rf /var/cache/apk/* && \
    # 更新时区
-   && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
+   ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
    # 更新时间
-   && echo ${TZ} > /etc/timezone
+   echo ${TZ} > /etc/timezone && \
+   # 更改为zsh
+   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || true && \
+   sed -i -e "s/bin\/ash/bin\/zsh/" /etc/passwd && \
+   sed -i -e 's/mouse=/mouse-=/g' /usr/share/vim/vim*/defaults.vim && \
+   /bin/zsh
+   
 	
 # 拷贝v2ray二进制文件至临时目录
 COPY --from=builder /tmp/v2ray.tgz /tmp
@@ -118,9 +116,9 @@ RUN set -eux && \
     chmod +x /usr/bin/v2ray/v2ray
 
 # 安装dumb-init
-RUN set -eux \
-    && wget --no-check-certificate https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 -O /usr/bin/dumb-init \
-    && chmod +x /usr/bin/dumb-init
+RUN set -eux && \
+    wget --no-check-certificate https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 -O /usr/bin/dumb-init && \
+    chmod +x /usr/bin/dumb-init
 
 # 设置环境变量
 ENV PATH /usr/bin/v2ray:$PATH
