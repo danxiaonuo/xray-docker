@@ -33,10 +33,8 @@ ENV BUILD_DEPS=$BUILD_DEPS
 RUN set -eux && \
    # 修改源地址
    sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
-   # 更新源地址
-   apk update && \
-   # 更新系统并更新系统软件
-   apk upgrade && apk upgrade && \
+   # 更新源和更新系统软件
+   apk update && upgrade \
    apk add --no-cache --clean-protected $BUILD_DEPS && \
    rm -rf /var/cache/apk/* && \
    # 更新时区
@@ -87,10 +85,8 @@ ENV DUMBINIT_VERSION=$DUMBINIT_VERSION
 RUN set -eux && \
    # 修改源地址
    sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
-   # 更新源地址
-   apk update && \
-   # 更新系统并更新系统软件
-   apk upgrade && apk upgrade && \
+   # 更新源和更新系统软件
+   apk update && upgrade \
    apk add --no-cache --clean-protected $PKG_DEPS && \
    rm -rf /var/cache/apk/* && \
    # 更新时区
@@ -112,7 +108,6 @@ RUN set -eux && \
     mkdir -p /usr/bin/v2ray /etc/v2ray && \
     tar xvfz /tmp/v2ray.tgz -C /usr/bin/v2ray && \
     rm -rf /tmp/v2ray.tgz /usr/bin/v2ray/*.sig /usr/bin/v2ray/doc /usr/bin/v2ray/*.json /usr/bin/v2ray/*.dat /usr/bin/v2ray/sys* && \
-    chmod +x /usr/bin/v2ray/v2ctl && \
     chmod +x /usr/bin/v2ray/v2ray
 
 # 安装dumb-init
