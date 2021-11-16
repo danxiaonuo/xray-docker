@@ -117,9 +117,6 @@ RUN set -eux && \
     wget --no-check-certificate https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 -O /usr/bin/dumb-init && \
     chmod +x /usr/bin/dumb-init
 
-# 设置环境变量
-ENV PATH /usr/bin/v2ray:$PATH
-
 # 拷贝配置文件
 COPY conf/v2ray/config.json /etc/v2ray/config.json
 
