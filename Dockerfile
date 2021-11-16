@@ -120,6 +120,9 @@ RUN set -eux && \
 # 拷贝配置文件
 COPY conf/v2ray/config.json /etc/v2ray/config.json
 
+# 设置环境变量
+ENV PATH /usr/bin/v2ray:$PATH
+
 # 容器信号处理
 STOPSIGNAL SIGQUIT
 
