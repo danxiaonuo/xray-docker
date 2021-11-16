@@ -33,8 +33,9 @@ ENV BUILD_DEPS=$BUILD_DEPS
 RUN set -eux && \
    # 修改源地址
    sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
-   # 更新源和更新系统软件
-   apk update && upgrade \
+   # 更新源地址并更新系统软件
+   && apk update && apk upgrade \
+   # 安装依赖包
    apk add --no-cache --clean-protected $BUILD_DEPS && \
    rm -rf /var/cache/apk/* && \
    # 更新时区
@@ -85,8 +86,9 @@ ENV DUMBINIT_VERSION=$DUMBINIT_VERSION
 RUN set -eux && \
    # 修改源地址
    sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
-   # 更新源和更新系统软件
-   apk update && upgrade \
+   # 更新源地址并更新系统软件
+   && apk update && apk upgrade \
+   # 安装依赖包
    apk add --no-cache --clean-protected $PKG_DEPS && \
    rm -rf /var/cache/apk/* && \
    # 更新时区
