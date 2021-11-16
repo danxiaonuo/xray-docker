@@ -120,9 +120,6 @@ RUN set -eux && \
 # 拷贝配置文件
 COPY conf/v2ray/config.json /etc/v2ray/config.json
 
-# 设置环境变量
-ENV PATH /usr/bin/v2ray:$PATH
-
 # 容器信号处理
 STOPSIGNAL SIGQUIT
 
@@ -130,4 +127,4 @@ STOPSIGNAL SIGQUIT
 ENTRYPOINT ["dumb-init"]
 
 # 运行v2ray
-CMD ["v2ray", "-config=/etc/v2ray/config.json"]
+CMD ["/usr/bin/v2ray/v2ray", "-config=/etc/v2ray/config.json"]
