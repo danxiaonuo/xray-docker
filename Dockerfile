@@ -57,8 +57,8 @@ RUN set -eux && \
 	
 # 授予文件权限
 RUN set -eux && \
-    curl -L -H "Cache-Control: no-cache" -o /v2ray.zip https://github.com/v2fly/v2ray-core/releases/download/v4.40.0/v2ray-linux-64.zip && \
-    # curl -L -H "Cache-Control: no-cache" -o /v2ray.zip https://github.com/v2fly/v2ray-core/releases/latest/download/v2ray-linux-64.zip && \
+    # curl -L -H "Cache-Control: no-cache" -o /v2ray.zip https://github.com/v2fly/v2ray-core/releases/download/v4.40.0/v2ray-linux-64.zip && \
+    curl -L -H "Cache-Control: no-cache" -o /v2ray.zip https://github.com/v2fly/v2ray-core/releases/latest/download/v2ray-linux-64.zip && \
     mkdir -p /usr/bin/v2ray /etc/v2ray && \
     unzip /v2ray.zip -d /usr/bin/v2ray && \
     rm -rf /v2ray.zip /tmp/v2ray.tgz /usr/bin/v2ray/*.sig /usr/bin/v2ray/doc /usr/bin/v2ray/*.json /usr/bin/v2ray/*.dat /usr/bin/v2ray/sys* && \
