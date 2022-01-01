@@ -2,17 +2,17 @@ version: '3.9'
 services:
             
   # 服务名
-  v2ray:
+  xray:
     # 模拟一个伪终端
     tty: true
     # 打开标准输入,可以接受外部输入
     stdin_open: true
     # 主机名
-    hostname: v2ray
+    hostname: xray
     # 指定容器名称
-    container_name: v2ray
+    container_name: xray
     # 指定为镜像名称或镜像ID
-    image: danxiaonuo/v2ray:latest
+    image: danxiaonuo/xray:latest
     # 覆盖容器启动后默认执行的命令
     # command: /sbin/init
     # 允许容器中运行一些特权命令
@@ -30,7 +30,7 @@ services:
     # 数据卷所挂载路径设置
     volumes:
       # 配置目录与文件
-      - ./conf/v2ray/config.json:/etc/v2ray/config.json:rw,cached
+      - ./conf/xray/config.json:/etc/xray/config.json:rw,cached
       # 同步宿主机时区与时间
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro,cached
       - /etc/localtime:/etc/localtime:ro,cached
@@ -112,7 +112,7 @@ services:
      - /dev/net/tun
     # 解决容器的依赖
     depends_on:
-      - "v2ray"
+      - "xray"
     # 配置容器连接的网络
     networks:
       app_net:
