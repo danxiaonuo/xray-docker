@@ -71,7 +71,7 @@ RUN set -eux && \
 COPY conf/xray/config.json /etc/xray/config.json
 
 # 设置环境变量
-ENV PATH /usr/bin/xray/xray:$PATH
+ENV PATH /usr/bin/xray:$PATH
 
 # 容器信号处理
 STOPSIGNAL SIGQUIT
