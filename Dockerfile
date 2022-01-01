@@ -55,25 +55,23 @@ RUN set -eux && \
    /bin/zsh
    
 	
-# 授予文件权限
+# 安装Xray
 RUN set -eux && \
-    # curl -L -H "Cache-Control: no-cache" -o /v2ray.zip https://github.com/v2fly/v2ray-core/releases/download/v4.40.0/v2ray-linux-64.zip && \
-    curl -L -H "Cache-Control: no-cache" -o /v2ray.zip https://github.com/v2fly/v2ray-core/releases/latest/download/v2ray-linux-64.zip && \
-    mkdir -p /usr/bin/v2ray /etc/v2ray && \
-    unzip /v2ray.zip -d /usr/bin/v2ray && \
-    rm -rf /v2ray.zip /tmp/v2ray.tgz /usr/bin/v2ray/*.sig /usr/bin/v2ray/doc /usr/bin/v2ray/*.json /usr/bin/v2ray/*.dat /usr/bin/v2ray/sys* && \
-    chmod +x /usr/bin/v2ray/v2ray /usr/bin/v2ray/v2ctl 
-
+    curl -L -H "Cache-Control: no-cache" -o /xray.zip https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip && \
+    mkdir /usr/bin/xray /etc/xray && \
+    unzip /xray.zip -d /usr/bin/xray && \
+    chmod -R 775 /usr/bin/xray
+    
 # 安装dumb-init
 RUN set -eux && \
     wget --no-check-certificate https://github.com/Yelp/dumb-init/releases/download/v${DUMBINIT_VERSION}/dumb-init_${DUMBINIT_VERSION}_x86_64 -O /usr/bin/dumb-init && \
     chmod +x /usr/bin/dumb-init
 
 # 拷贝配置文件
-COPY conf/v2ray/config.json /etc/v2ray/config.json
+COPY conf/xray/config.json /etc/xray/config.json
 
 # 设置环境变量
-ENV PATH /usr/bin/v2ray:$PATH
+ENV PATH /usr/bin/xray/xray:$PATH
 
 # 容器信号处理
 STOPSIGNAL SIGQUIT
@@ -81,5 +79,5 @@ STOPSIGNAL SIGQUIT
 # 入口
 ENTRYPOINT ["dumb-init"]
 
-# 运行v2ray
-CMD ["v2ray", "-config=/etc/v2ray/config.json"]
+# 运行xray
+CMD ["xray", "-config=/etc/xray/config.json"]
