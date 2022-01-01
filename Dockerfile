@@ -16,11 +16,17 @@ ENV LANG=$LANG
 
 ARG PKG_DEPS="\
       zsh \
+      bash \
+      bind-tools \
       iproute2 \
       git \
       vim \
       tzdata \
       curl \
+      wget \
+      lsof \
+      zip \
+      unzip \
       ca-certificates"
 ENV PKG_DEPS=$PKG_DEPS
 
@@ -51,10 +57,11 @@ RUN set -eux && \
 	
 # 授予文件权限
 RUN set -eux && \
-    curl -L -H "Cache-Control: no-cache" -o /v2ray.zip https://github.com/v2fly/v2ray-core/releases/latest/download/v2ray-linux-64.zip && \
+    curl -L -H "Cache-Control: no-cache" -o /v2ray.zip https://cdn.danxiaonuo.me/clash/releases/v2ray-linux-64.zip && \
+    # curl -L -H "Cache-Control: no-cache" -o /v2ray.zip https://github.com/v2fly/v2ray-core/releases/latest/download/v2ray-linux-64.zip && \
     mkdir -p /usr/bin/v2ray /etc/v2ray && \
     unzip /v2ray.zip -d /usr/bin/v2ray && \
-    rm -rf /tmp/v2ray.tgz /usr/bin/v2ray/*.sig /usr/bin/v2ray/doc /usr/bin/v2ray/*.json /usr/bin/v2ray/*.dat /usr/bin/v2ray/sys* && \
+    rm -rf /v2ray.zip /tmp/v2ray.tgz /usr/bin/v2ray/*.sig /usr/bin/v2ray/doc /usr/bin/v2ray/*.json /usr/bin/v2ray/*.dat /usr/bin/v2ray/sys* && \
     chmod +x /usr/bin/v2ray/v2ray /usr/bin/v2ray/v2ctl 
 
 # 安装dumb-init
