@@ -1,6 +1,5 @@
 #=================================================
-# https://github.com/danxiaonuo/v2ray-docker
-# Description: Build OpenWrt using GitHub Actions
+# https://github.com/danxiaonuo/xray-docker
 # Lisence: MIT
 # Author: danxiaonuo
 # Blog: https://www.danxiaonuo.com
@@ -20,9 +19,9 @@ on:
   workflow_dispatch:
     inputs:
       build:
-        description: 'build v2ray'
+        description: 'build xray'
         required: true
-        default: 'build v2ray'
+        default: 'build xray'
   # 定时触发编译(每天早5点)
   schedule:
      - cron: '0 21 * * *'
@@ -70,9 +69,9 @@ jobs:
       with:
         context: .
         file: ./Dockerfile
-        platforms: linux/amd64,linux/arm/v7,linux/arm64
+        platforms: linux/amd64
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/v2ray:${{ matrix.DOCKER_TAG }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/xray:${{ matrix.DOCKER_TAG }}
       
     - name: 上传至阿里云
       id: buildAndPushImage
@@ -80,7 +79,7 @@ jobs:
       with:
         registry_url: 'registry.cn-hongkong.aliyuncs.com'
         namespaces: 'danxiaonuo'
-        repository_name: 'v2ray'
+        repository_name: 'xray'
         user_name: ${{ secrets.ALIYUN_USERNAME }}
         password: ${{ secrets.ALIYUN_PASSWORD }}
         image_version: ${{ matrix.DOCKER_TAG }}
@@ -88,3 +87,10 @@ jobs:
         
     - name: 获取阿里云镜像地址
       run: echo "这是阿里云镜像地址 ${{ steps.buildAndPushImage.outputs.image_pull_url }}"
+    
+    - name: 删除旧的GitHub-workflow
+      uses: Mattraks/delete-workflow-runs@main
+      with:
+        repository: ${{ github.repository }}
+        retain_days: 1
+        keep_minimum_runs: 1    #保留多少个workflow不删除
